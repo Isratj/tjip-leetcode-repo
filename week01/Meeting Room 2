@@ -1,0 +1,76 @@
+Problem Statement
+The Meeting Rooms II LeetCode Solution – “Meeting Rooms II” states that you are given an array of meeting time intervals “intervals” where “intervals[i] = [ start[i], end[i] ]”, return the minimum number of conference rooms required.
+
+Example:
+Meeting Rooms II LeetCode SolutionPin
+
+intervals = [[0,30],[5,10],[15,20]]
+2
+Explanation:
+
+Meeting one can be done in conference room 1 form 0 – 30.
+
+Meeting two can be done in conference room 2 form 5 – 10.
+
+Meeting three can be done in conference room 2 form 15 – 20 as it is free in this interval.
+
+intervals = [[7,10],[2,4]]
+1
+Explanation:
+
+Meeting one can be done in conference room 1 form 2 – 4.
+
+Meeting two can be done in conference room 1 form 7 – 10 as it is free in this interval.
+
+Approach
+Idea:
+Maintain two sorted arrays, one of which stores the starting time of the meetings and the other one stores the ending time. Then use the two-pointer ( let’s call the iterator for start array ‘i’ and for end array ‘j’) method to iterate over the start array and end array. We will also maintain a variable “curr”, which will store the current number of simultaneous meetings going on as we will need that many conference rooms.
+
+If start[i] < end[j], it means that the jth meeting is still going and we need another room for the ith meeting, this is why we will increase ‘curr’ by one and we will also increase ‘i’, as we have started the ith meeting.
+If start[i] >= end[j], it means that the jth meeting is over and that room is free now, this is why we will decrease ‘curr’ by one and we will increase ‘j’, as the jth meeting has ended.
+See also
+Can Make Arithmetic Progression From Sequence Leetcode Solution
+Now our answer is just the highest value of ‘curr’ throughout the process.
+
+Code
+C++ Program of Meeting Rooms II:
+#include <bits/stdc++.h>
+using namespace std;
+int minMeetingRooms(vector<vector<int>> &intervals)
+{
+    vector<int> start;
+    vector<int> end;
+    for (int i = 0; i < intervals.size(); i++)
+    {
+        start.push_back(intervals[i][0]);
+        end.push_back(intervals[i][1]);
+    }
+    sort(start.begin(), start.end());
+    sort(end.begin(), end.end());
+    int i = 1, j = 0, curr = 1;
+    int answer = 1;
+    while (i < start.size() && j < end.size())
+    {
+        if (start[i] < end[j])
+        {
+            curr++;
+            i++;
+        }
+        else
+        {
+            curr--;
+            j++;
+        }
+        answer = max(answer, curr);
+    }
+    return answer;
+}
+int main()
+{
+    vector<vector<int>> intervals = {{0, 30}, {5, 10}, {15, 20}};
+    cout << minMeetingRooms(intervals);
+    return 0;
+}
+Output:2
+
+https://www.tutorialcup.com/leetcode-solutions/meeting-rooms-ii-leetcode-solution.htm
