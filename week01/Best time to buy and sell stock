@@ -1,0 +1,29 @@
+Python3:
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        min_price = float('inf')
+        max_profit = 0
+        for i in range(len(prices)):
+            if prices[i] < min_price:
+                min_price = prices[i]
+            elif prices[i] - min_price > max_profit:
+                max_profit = prices[i] - min_price
+                
+        return max_profit
+        
+C++:
+
+int maxProfit(vector<int>& prices) {
+
+    int currentMin = INT_MAX;
+    int result = 0;
+
+    for (int i = 0; i < prices.size(); i++) {
+        result = max(result, prices[i] - currentMin);
+        currentMin = min(currentMin, prices[i]);
+    }
+
+    return result;
+
+}
