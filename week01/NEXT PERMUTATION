@@ -1,0 +1,114 @@
+https://leetcode.com/problems/next-permutation/solution/
+
+Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+If such an arrangement is not possible, it must rearrange it as the lowest possible order (i.e., sorted in ascending order).
+
+The replacement must be in place and use only constant extra memory.
+
+Problem statement taken from: https://leetcode.com/problems/next-permutation
+
+Example 1:
+
+Input: nums = [1, 2, 3]
+Output: [1, 3, 2]
+Example 2:
+
+Input: nums = [3, 2, 1]
+Output: [1, 2, 3]
+Example 3:
+
+Input: nums = [1, 1, 5]
+Output: [1, 5, 1]
+Example 4:
+
+Input: nums = [1]
+Output: [1]
+Constraints:
+
+- 1 <= nums.length <= 100
+- 0 <= nums[i] <= 100
+Explanation
+Brute force approach
+Brute force approach is to find all possible permutations of the array elements and find out the permutation which is the next largest one.
+
+The problem here is, we are generating all permutations of the array elements and it takes lot of time.
+
+The time complexity of this approach is O(N!) and space complexity is O(N).
+
+Single pass approach
+For a given sequence which is in descending order as below
+
+[8, 5, 3, 2, 1]
+
+there is no next larger permutation possible. This gives us a hint on identifying the next larger permutation.
+
+We need to find the first pair of two successive numbers nums[i] and nums[i − 1], from the right, which satisfy nums[i] > nums[i − 1].
+
+Once we find the index i - 1, we need to replace the number nums[i - 1] with the number which is just larger than itself among the numbers lying to its right section nums[i]..nums[nums.size() - 1], say nums[j].
+
+We swap the numbers nums[i - 1] and nums[j]. We reverse all the numbers from index i and nums.size() - 1.
+
+Algorithm
+- return if nums.size() <= 1
+- set n = nums.size(), i = n - 1
+- loop while i > 0
+  - if nums[i] > nums[i - 1]
+    - break
+
+- if i <= 0
+  - i = 0
+
+- set x = ( i == 0 ) ? nums[i] : nums[i - 1]
+- smallest = i
+
+- loop for j = i + 1; j < n; j++
+  - nums[j] > x && nums[j] < nums[smallest]
+    - smallest = j
+
+- swap(&nums[smallest], (i == 0 ? &nums[i] : &nums[i - 1]));
+
+- sort(nums.begin() + i, nums.end());
+C++ solution
+class Solution {
+public: void swap(int *a, int *b)
+    {
+        int temp = *a;
+        *a = *b;
+        *b = temp;
+    }
+public:
+    void nextPermutation(vector<int>& nums) {
+        if(nums.size() <= 1){
+            return;
+        }
+
+        int n = nums.size();
+        int i = n - 1;
+        for(;i > 0; i--){
+            if(nums[i] > nums[i-1])
+                break;
+        }
+
+        if(i <= 0){
+            i = 0;
+        }
+
+        int x = (i == 0 ? nums[i] : nums[i - 1]);
+        int smallest = i;
+
+        for(int j = i + 1; j < n; j++){
+            if(nums[j] > x && nums[j] < nums[smallest])
+                smallest = j;
+        }
+
+        swap(&nums[smallest], (i == 0 ? &nums[i] : &nums[i - 1]));
+
+        // we can also use reverse
+        sort(nums.begin() + i, nums.end());
+    }
+};
+
+
+
+https://alkeshghorpade.me/post/leetcode-next-permutation
